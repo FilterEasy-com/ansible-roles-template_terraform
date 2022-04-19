@@ -23,7 +23,7 @@
         dest: "{{ project.dest }}/{{ item | basename | replace('.j2', '') }}"
       with_fileglob:
         - "{{ project.common_dir }}/*.j2"
-  when: project.common is defined
+  when: project.common_dir is defined
 
 - name: Stage Project Files
   block:
