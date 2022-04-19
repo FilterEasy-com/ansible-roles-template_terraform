@@ -31,7 +31,7 @@
           "name": (item.path | basename | split('-'))[1],
           "src":  item.path,
           "common_dir": (item.path | dirname) + "/common",
-          "dest": _dest_tf_path + "/" + (item.path | basename | split('-'))[1]
+          "dest": template_terraform_dest_path + "/" + (item.path | basename | split('-'))[1]
           }] }}
       loop: "{{ _project_dirs.files }}"
       when: "'common' not in (item.path | basename)"
