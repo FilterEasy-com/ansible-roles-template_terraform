@@ -1,0 +1,46 @@
+---
+
+- name: Print Project Name
+  debug:
+    msg: Templating {{ project.name }} files
+
+- name: Create Project Destination Directory
+  file:
+    path: "{{ project.dest }}"
+    state: directory
+
+- name: Stage Common Files
+  block:
+    - name: Copy Common Files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ project.dest }}/{{ item | basename }}"
+      with_fileglob:
+        - "{{ project.common_dir }}/*.tf"
+    - name: Template Common Files
+      template:
+        src: "{{ item }}"
+        dest: "{{ project.dest }}/{{ item | basename | replace('.j2', '') }}"
+      with_fileglob:
+        - "{{ project.common_dir }}/*.j2"
+  when: project.common is defined
+
+- name: Stage Project Files
+  block:
+    - name: Copy Project Files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ project.dest }}/{{ item | basename }}"
+      with_fileglob:
+        - "{{ project.src }}/*.tf"
+        - "{{ project.src }}/*.xml"
+    - name: Template Project Files
+      template:
+        src: "{{ item }}"
+        dest: "{{ project.dest }}/{{ item | basename | replace('.j2', '') }}"
+      with_fileglob:
+        - "{{ project.src }}/*.j2"
+
+- name: Add Project To Ordered Priority List
+  set_fact:
+    projects_by_priority: "{{ projects_by_priority + [project.dest] }}"

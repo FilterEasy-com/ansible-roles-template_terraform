@@ -1,0 +1,49 @@
+---
+- name: Reset Project Priority List
+  set_fact:
+    projects_by_priority: []
+
+- name: Reset Templated Directory
+  file:
+    path: "{{ template_terraform_dest_path }}"
+    state: absent
+
+- name: Parse Single Project Facts
+  set_fact:
+    projects:
+      - name: project
+        src: "{{ template_terraform_src_path }}"
+        dest: "{{ template_terraform_dest_path }}"
+  when: not template_terraform_multi_projects
+
+- name: Multi Project Tasks
+  block:
+    - name: Find Source Projects
+      find:
+        paths: "{{ template_terraform_src_path }}"
+        file_type: directory
+        recurse: false
+      register: _project_dirs
+    - name: Parse Project Facts
+      set_fact:
+        projects: >-
+          {{ projects | default([]) + [{
+          "name": (item.path | basename | split('-'))[1],
+          "src":  item.path,
+          "common_dir": (item.path | dirname) + "/common",
+          "dest": _dest_tf_path + "/" + (item.path | basename | split('-'))[1]
+          }] }}
+      loop: "{{ _project_dirs.files }}"
+      when: "'common' not in (item.path | basename)"
+  when: template_terraform_multi_projects
+
+- name: Template Projects
+  include_tasks: "{{ role_path }}/tasks/template.yml"
+  loop: "{{ projects }}"
+  loop_control:
+    loop_var: project
+  when: project['name'] not in template_terraform_exclude_projects
+
+- name: The Following Projects were templated
+  debug:
+    var: projects_by_priority

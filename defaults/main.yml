@@ -1,0 +1,6 @@
+---
+template_terraform_src_path: "{{ playbook_dir }}/src_terraform"
+template_terraform_dest_path: "{{ playbook_dir }}/templated_terraform"
+template_terraform_backend_config: {}
+template_terraform_exclude_projects: []
+template_terraform_multi_projects: False

@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include mikemorency.template_terraform"
+      include_role:
+        name: "mikemorency.template_terraform"
