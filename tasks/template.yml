@@ -41,6 +41,7 @@
       with_fileglob:
         - "{{ project.src }}/*.j2"
 
-- name: Add Project To Ordered Priority List
+- name: Add Project To Ordered Priority Dict
   set_fact:
-    projects_by_priority: "{{ projects_by_priority + [project.dest] }}"
+    projects_by_priority: >-
+      {{ projects_by_priority | combine({(project.priority | default(99) | int): project.dest }) }}
