@@ -31,7 +31,8 @@
           "name": (item.path | basename | split('-'))[1] | default(item.path | basename),
           "src":  item.path,
           "common_dir": (item.path | dirname) + "/common",
-          "dest": template_terraform_dest_path + "/" + (item.path | basename | split('-'))[1]  | default(item.path | basename)
+          "dest": template_terraform_dest_path + "/" + (item.path | basename | split('-'))[1]  | default(item.path | basename),
+          "priority": ((item.path | basename | split('-') | length) > 1) | ternary((item.path | basename | split('-'))[0], "99")
           }] }}
       loop: "{{ _project_dirs.files }}"
       when: "'common' not in (item.path | basename)"
