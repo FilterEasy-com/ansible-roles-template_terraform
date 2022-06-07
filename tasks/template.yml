@@ -1,5 +1,4 @@
 ---
-
 - name: Print Project Name
   debug:
     msg: Templating {{ project.name }} files
