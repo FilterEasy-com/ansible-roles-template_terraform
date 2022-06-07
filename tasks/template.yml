@@ -43,4 +43,4 @@
 - name: Add Project To Ordered Priority Dict
   set_fact:
     _templated_projects: >-
-      {{ projects_by_priority | combine({(project.priority | default(99) | int): project.dest }) }}
+      {{ _templated_projects | combine({(project.priority | default(99) | int): project.dest }) }}
