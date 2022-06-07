@@ -47,8 +47,8 @@
 
 - name: Sort The Project Priority
   set_fact:
-    projects_by_priority: "{{ projects_by_priority + [item[1]] }}"
-  loop: "{{ _templated_projects | dictsort }}"
+    projects_by_priority: "{{ projects_by_priority + [item[0]] }}"
+  loop: "{{ _templated_projects | dictsort(false, 'value') }}"
           
 - name: The Following Projects were templated
   debug:
