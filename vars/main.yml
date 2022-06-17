@@ -1,4 +1,10 @@
 ---
-_template_terraform_src_path: "{{ role_path }}/../../src_terraform"
-_template_terraform_dest_path: "{{ playbook_dir }}/templated_terraform"
 _backend_config: {}
+template_terraform:
+  src_path: "{{ role_path }}/../../src_terraform"
+  dest_path: "{{ playbook_dir }}/templated_terraform"
+  account_ids:
+    mgt: '477814272690'
+    dev: '222756368601'
+    uat: '166574158470'
+    prd: '468663423357'
